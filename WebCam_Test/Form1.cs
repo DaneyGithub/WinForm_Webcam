@@ -28,7 +28,6 @@ namespace WebCam_Test
 
         }
 
-
         public Form1()
         {
             InitializeComponent();
@@ -36,9 +35,19 @@ namespace WebCam_Test
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            cam = new VideoCaptureDevice(webcam[devicesComboBox.SelectedIndex].MonikerString);
-            cam.NewFrame += new NewFrameEventHandler(cam_NewFrame);
-            cam.Start();
+            try
+            {
+                label2.Text = "";
+                cam = new VideoCaptureDevice(webcam[devicesComboBox.SelectedIndex].MonikerString);
+                cam.NewFrame += new NewFrameEventHandler(cam_NewFrame);
+                cam.Start();
+            }
+
+            catch
+
+            {
+                label2.Text = "No Video device selected";
+            }
         }
 
         void cam_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -49,11 +58,20 @@ namespace WebCam_Test
         private void btnCapture_Click(object sender, EventArgs e)
         {
             saveFileDialog01.InitialDirectory = @"C:\Users\Windows\Pictures";
-            if (saveFileDialog01.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog01.ShowDialog() == DialogResult.OK && webCamPicBox.Image != null)
             {
-                webCamPicBox.Image.Save(saveFileDialog01.FileName);
-            }
+                try
+                {
+                    webCamPicBox.Image.Save(saveFileDialog01.FileName);
+                }
 
+                catch
+                {
+                    label2.Text = "Nothing to save on the picture box";
+                }
+
+            }
+            
         }
 
         private void btnStop_Click(object sender, EventArgs e)
